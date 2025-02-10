@@ -1,44 +1,12 @@
 import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { AgentService } from './agent.service';
-import * as Joi from 'joi';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-
+import { EventService } from './events/event.service';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ConfigModule } from '@nestjs/config';
+import { RabbitMQService } from './rabbitmq/rabbitmq.service';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      envFilePath: '.env',
-      load: [],
-      validationSchema: Joi.object({
-        AGENT_ID: Joi.string().required().min(3).max(20).label('Agent ID'),
-        RABBITMQ_URL: Joi.string().uri().required().label('RabbitMQ URL'),
-      }),
-    }),
-    ClientsModule.registerAsync([
-      {
-        name: 'EVENT_PUBLISHER',
-        imports: [ConfigModule],
-        inject: [ConfigService],
-        useFactory: async (configService: ConfigService) => {
-          const rabbitMqUrl = configService.get<string>('RABBITMQ_URL');
-
-          if (!rabbitMqUrl) {
-            throw new Error('RABBITMQ_URL is not defined in the environment');
-          }
-
-          return {
-            transport: Transport.RMQ,
-            options: {
-              urls: [rabbitMqUrl],
-              queue: 'test',
-              queueOptions: { durable: false },
-            },
-          };
-        },
-      },
-    ]),
-  ],
-  providers: [AgentService],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), ScheduleModule.forRoot()],
+  providers: [EventService, RabbitMQService],
+  exports: [RabbitMQService],
 })
 export class AppModule { }

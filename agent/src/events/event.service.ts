@@ -1,11 +1,33 @@
-import { Injectable, OnModuleInit, Inject } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { Injectable } from '@nestjs/common';
+import { RabbitMQService } from '../rabbitmq/rabbitmq.service';
+import { XrayDataDto } from '../events/event.dto';
+import { faker } from '@faker-js/faker';
+import { Interval } from '@nestjs/schedule';
 
 @Injectable()
-export class EventService implements OnModuleInit {
-  constructor(@Inject('EVENT_PUBLISHER') private readonly client: ClientProxy) {}
+export class EventService {
+  constructor(private readonly rabbitMQService: RabbitMQService) { }
+  generateXrayData(): XrayDataDto {
+    const deviceId = faker.string.uuid();
+    const data: [number, number[]][] = [
+      [
+        faker.number.int({ min: 0, max: 50000 }),
+        [
+          parseFloat(faker.location.latitude({ min: 51.339, max: 51.341 }).toFixed(6)),
+          parseFloat(faker.location.longitude({ min: 12.338, max: 12.340 }).toFixed(6)),
+          parseFloat(faker.number.float({ min: 0.1, max: 3.5, fractionDigits: 4 }).toFixed(6)),
+        ],
+      ],
+    ];
+    const timestamp = Date.now();
+    return { deviceId, data, time: timestamp };
+  }
 
-  onModuleInit() {
+  @Interval(1000)  // Run every 1000ms (1 second)
+  async sendXrayEvent() {
+    const xrayData = this.generateXrayData();
+    await this.rabbitMQService.emitXrayData(xrayData);
+    // console.log('📤 X-ray Data Sent:', xrayData);
+    console.log('📤 X-ray Data Sent:', JSON.stringify(xrayData));
   }
 }
-
