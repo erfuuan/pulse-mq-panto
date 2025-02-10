@@ -1,6 +1,6 @@
 import { IsString, IsNumber, IsDateString, IsOptional } from 'class-validator';
 
-export class CreateEventDto {
+export class CreateSignalDto {
   @IsString({ message: 'Name must be a string' })
   name: string;
 

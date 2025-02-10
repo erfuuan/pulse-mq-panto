@@ -1,16 +1,21 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { RabbitMQService } from './rabbitmq.service';
-import { CreateEventDto } from '../event/DTO/create-event.dto'
+import { CreateSignalDto } from '../signals/DTO/create-signal.dto'
 @Controller()
 export class rabbitmqController {
   constructor(
-    private readonly rabbitMQService: RabbitMQService,
+    // private readonly rabbitMQService: RabbitMQService,
   ) { }
 
-  @MessagePattern('event_pattern_test')
-  async handleEventCreated(@Payload() event: CreateEventDto) {
-    const createdEvent = await this.rabbitMQService.create(event)
-    await this.rabbitMQService.checkMatchRule(createdEvent)
+  @MessagePattern('xray1')
+
+  async handleEventCreated(@Payload() event: CreateSignalDto) {
+    console.log("START")
+    try {
+      console.log("🚀 Message received:");
+      console.log(event);
+    } catch (error) {
+      console.error("❌ Error processing message:", error);
+    }
   }
 }

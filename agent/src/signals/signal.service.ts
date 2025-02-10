@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { RabbitMQService } from '../rabbitmq/rabbitmq.service';
-import { XrayDataDto } from '../events/event.dto';
+import { XrayDataDto } from './signal.dto';
 import { faker } from '@faker-js/faker';
 import { Interval } from '@nestjs/schedule';
 
 @Injectable()
-export class EventService {
+export class SignalService {
   constructor(private readonly rabbitMQService: RabbitMQService) { }
   generateXrayData(): XrayDataDto {
-    console.log("dicl")
     const deviceId = faker.string.uuid();
     const data: [number, number[]][] = [
       [
@@ -25,7 +24,7 @@ export class EventService {
   }
 
   @Interval(1000)  // Run every 1000ms (1 second)
-  async sendXrayEvent() {
+  async sendXraySignal() {
     const xrayData = this.generateXrayData();
     await this.rabbitMQService.emitXrayData(xrayData);
     console.log('📤 X-ray Data Sent:', JSON.stringify(xrayData));

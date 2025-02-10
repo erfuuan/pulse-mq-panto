@@ -5,5 +5,4 @@ async function bootstrap() {
   await NestFactory.createApplicationContext(AppModule);
   console.log('🚀 Application started');
 }
-
 bootstrap();

@@ -1,13 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { EventModule } from './event/event.module';
-import { RabbitMQService } from './rabbitmq/rabbitmq.service'
-import { RabbitMQModule } from './rabbitmq/rabbitmq.module';
-import { MatchModule } from './matches/match.module';
-import { RuleModule } from './rule/rule.module'
+import { SignalModule } from './signals/signal.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { RedisModule } from './redis/redis.module'
-import { RuleService } from './rule/rule.service';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
@@ -18,13 +12,10 @@ import { RuleService } from './rule/rule.service';
       }),
       inject: [ConfigService]
     }),
-    EventModule,
-    RabbitMQModule,
-    MatchModule,
-    RuleModule,
-    RedisModule,
+    SignalModule,
+  
   ],
-  providers: [RabbitMQService, RuleService],
+  providers: [],
 
   controllers: [],
 })
