@@ -8,6 +8,7 @@ import { Interval } from '@nestjs/schedule';
 export class EventService {
   constructor(private readonly rabbitMQService: RabbitMQService) { }
   generateXrayData(): XrayDataDto {
+    console.log("dicl")
     const deviceId = faker.string.uuid();
     const data: [number, number[]][] = [
       [
@@ -27,7 +28,6 @@ export class EventService {
   async sendXrayEvent() {
     const xrayData = this.generateXrayData();
     await this.rabbitMQService.emitXrayData(xrayData);
-    // console.log('📤 X-ray Data Sent:', xrayData);
     console.log('📤 X-ray Data Sent:', JSON.stringify(xrayData));
   }
 }
