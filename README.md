@@ -1,4 +1,4 @@
-## 📌 **Part Task - Production Setup Guide**  
+## 📌 **PulseMQ-Panto Task - Production Setup Guide**  
 
 To run this project in **production mode**, follow these steps carefully:  
 

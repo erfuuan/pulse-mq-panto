@@ -32,11 +32,13 @@ async function bootstrap() {
     throw new Error('RabbitMQ configuration is missing in the environment file.');
   }
 
+
+
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
     options: {
-      urls: [rabbitMqUrl],
-      queue: queue,
+      urls: ['amqp://user:password@localhost:5672'],
+      queue: 'test',
       queueOptions: {
         durable: false,
       },
