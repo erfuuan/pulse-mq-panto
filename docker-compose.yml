@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   process:
     image: ghcr.io/erfuuan/pulse-mq-panto/process:latest
