@@ -28,8 +28,8 @@ jobs:
           file: process/Dockerfile
           push: true
           tags: |
-            ghcr.io/erfuuan/part-task/process:${{ github.event.release.tag_name }}
-            ghcr.io/erfuuan/part-task/process:latest
+            ghcr.io/erfuuan/PulseMQ-Panto/process:${{ github.event.release.tag_name }}
+            ghcr.io/erfuuan/PulseMQ-Panto/process:latest
 
   build-agent-image:
     if: github.event_name == 'release'
@@ -51,5 +51,5 @@ jobs:
           file: agent/Dockerfile
           push: true
           tags: |
-            ghcr.io/erfuuan/part-task/agent:${{ github.event.release.tag_name }}
-            ghcr.io/erfuuan/part-task/agent:latest
+            ghcr.io/erfuuan/PulseMQ-Panto/agent:${{ github.event.release.tag_name }}
+            ghcr.io/erfuuan/PulseMQ-Panto/agent:latest
