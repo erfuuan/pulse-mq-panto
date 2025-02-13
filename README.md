@@ -49,7 +49,6 @@ MONGO_URI=mongodb://mongo:27017/eventsDB
 
 RABBITMQ_URL=amqp://user:password@rabbitmq:5672
 RABBITMQ_QUEUE=xray_data_queue      
-RABBITMQ_QUEUE_DURABLE=0
 
 PORT=3000                        
 ```
