@@ -3,52 +3,45 @@ import { Document } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 
 export interface ISignal extends Document {
-  name: string;
-  value: number;
-  timestamp: Date;
-  agentId: string;
+  deviceId: string;
+  data: Array<[number, [number, number, number]]>;
+  time: number;
+  createdAt: Date;
 }
 
 @Schema({
   timestamps: { createdAt: 'createdAt' },
-  versionKey: false
+  versionKey: false,
 })
 export class Signal extends Document {
 
   @ApiProperty({
-    description: 'The name of the signal',
-    example: 'CPU_Usage_High',
+    description: 'The unique device ID',
+    example: '968c4eb9-1a9a-44a5-a4be-277de049c5c6',
   })
   @Prop({ required: true })
-  name: string;
+  deviceId: string;
 
   @ApiProperty({
-    description: 'The value associated with the signal',
-    example: 85,
+    description: 'Array of timestamped data with coordinates or other data',
+    example: [[5042, [51.3399, 12.338, 1.8521]]],
   })
   @Prop({ required: true })
-  value: number;
+  data: Array<[number, [number, number, number]]>;
 
   @ApiProperty({
-    description: 'The unique identifier of the agent generating the signal',
-    example: 'agent_56789',
+    description: 'The timestamp when the data was received',
+    example: 1739450223904,
   })
   @Prop({ required: true })
-  agentId: string;
+  time: number;
 
   @ApiProperty({
-    description: 'The timestamp when the signal was created',
-    example: '2023-10-08T14:25:43.511Z',
+    description: 'The timestamp when the data was created (generated on the server)',
+    example: '2025-02-06T12:00:00.000Z',
   })
   @Prop()
   createdAt: Date;
-
-  @ApiProperty({
-    description: 'The specific timestamp when the signal occurred',
-    example: '2023-10-08T13:00:00.000Z',
-  })
-  @Prop()
-  timestamp: Date;
 }
 
 export const SignalSchema = SchemaFactory.createForClass(Signal);

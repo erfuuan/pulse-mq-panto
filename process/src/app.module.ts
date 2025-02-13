@@ -13,7 +13,7 @@ import { RabbitMQService } from './rabbitmq/rabbitmq.service'
       }),
       inject: [ConfigService]
     }),
-    // SignalModule,
+    SignalModule,
     RabbitMQModule
   ],
   providers: [RabbitMQService],

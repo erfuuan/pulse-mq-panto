@@ -32,8 +32,6 @@ async function bootstrap() {
     throw new Error('RabbitMQ configuration is missing in the environment file.');
   }
 
-
-
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
     options: {
@@ -55,5 +53,4 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
   await app.listen(3000);
 }
-
 bootstrap();

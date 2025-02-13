@@ -29,7 +29,6 @@ export class SignalService {
   // Run every 1000ms (1 second)
   @Interval(1000)
   async sendXraySignal() {
-    console.log("ji")
     const xrayData = this.generateXrayData();
     // await this.rabbitMQService.emitXrayData(xrayData);
     console.log('📤 X-ray Data Sent:', JSON.stringify(xrayData));
