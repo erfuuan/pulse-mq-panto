@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
-import { APP_FILTER } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AllExceptionsFilter } from './filters/all-exceptions.filter'
 import { SignalModule } from './signals/signal.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RabbitMQModule } from './rabbitmq/rabbitmq.module'
@@ -20,10 +18,6 @@ import { WinstonLoggerService } from './logger.service'
     RabbitMQModule
   ],
   providers: [
-    // {
-    //   provide: APP_FILTER,
-    //   useClass: AllExceptionsFilter,
-    // },
     WinstonLoggerService,
     RabbitMQService],
 

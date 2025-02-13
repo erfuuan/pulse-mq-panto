@@ -3,8 +3,8 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import * as Joi from 'joi';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
-import { SignalService} from './signals/signal.service' 
-
+import { SignalService } from './signals/signal.service'
+import { WinstonLoggerService } from './logger.service';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -23,15 +23,9 @@ import { SignalService} from './signals/signal.service'
         useFactory: async (configService: ConfigService) => {
           const rabbitMqUrl = configService.get<string>('RABBITMQ_URL');
           const queue = configService.get<string>('RABBITMQ_QUEUE');
-        
-          if (!rabbitMqUrl || !queue) {
-            throw new Error('RabbitMQ configuration is missing in the environment file.');
-          }
 
+          if (!rabbitMqUrl || !queue) { throw new Error('RabbitMQ configuration is missing in the environment file.') }
 
-          if (!rabbitMqUrl) {
-            throw new Error('RABBITMQ_URL is not defined in the environment');
-          }
           return {
             transport: Transport.RMQ,
             options: {
@@ -44,6 +38,8 @@ import { SignalService} from './signals/signal.service'
       },
     ]),
   ],
-  providers: [SignalService],
+
+  providers: [SignalService, WinstonLoggerService],
 })
+
 export class AppModule { }

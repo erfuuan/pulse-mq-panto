@@ -22,18 +22,16 @@ export class SignalService {
   async findAllWithPagination(page: number, limit: number): Promise<PaginatedSignalResponseDto> {
     const skip = (page - 1) * limit;
 
-    // Fetch signals and count documents in parallel
     const [signals, total] = await Promise.all([
-      this.signalModel.find().skip(skip).limit(limit), // Paginated data
-      this.signalModel.countDocuments(), // Total count of documents
+      this.signalModel.find().skip(skip).limit(limit),
+      this.signalModel.countDocuments(),
     ]);
 
-    // Prepare pagination metadata
     const meta = {
       total,
       page,
       limit,
-      totalPages: Math.ceil(total / limit), // Calculate total pages
+      totalPages: Math.ceil(total / limit),
     };
 
     return {

@@ -6,3 +6,5 @@ node_modules/
 dist/
 rabbitmq_data/
 package-lock.json
+app.log
+error.log

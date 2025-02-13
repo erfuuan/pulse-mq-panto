@@ -28,9 +28,7 @@ async function bootstrap() {
   const rabbitMqUrl = configService.get<string>('RABBITMQ_URL');
   const queue = configService.get<string>('RABBITMQ_QUEUE');
 
-  if (!rabbitMqUrl || !queue) {
-    throw new Error('RabbitMQ configuration is missing in the environment file.');
-  }
+  if (!rabbitMqUrl || !queue) { throw new Error('RabbitMQ configuration is missing in the environment file.') }
 
   logger.log('Starting RabbitMQ Consumer...');
 
@@ -46,7 +44,8 @@ async function bootstrap() {
   });
 
   await app.startAllMicroservices();
-  logger.log(`✔️ RabbitMQ Consumer connected to queue: ${queue}`);
+  logger.log(`✔️ Rab
+    bitMQ Consumer connected to queue: ${queue}`);
 
   const config = new DocumentBuilder()
     .setTitle('API Documentation')
@@ -58,4 +57,5 @@ async function bootstrap() {
   await app.listen(3000);
   logger.log('🚀 Application started');
 }
+
 bootstrap();

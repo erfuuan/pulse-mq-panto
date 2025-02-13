@@ -1,11 +1,13 @@
-import { IsString, IsArray, IsNumber } from 'class-validator';
+import { IsString, IsArray, IsNumber, ArrayMinSize, ArrayMaxSize } from 'class-validator';
 
 export class XrayDataDto {
   @IsString()
   deviceId: string;
 
   @IsArray()
-  data: Array<[number, number[]]>;
+  @ArrayMinSize(1)
+  @ArrayMaxSize(100)
+  data: Array<[number, [number, number, number]]>;
 
   @IsNumber()
   time: number;
