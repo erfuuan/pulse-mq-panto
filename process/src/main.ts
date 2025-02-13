@@ -6,10 +6,10 @@ import { ConfigService } from '@nestjs/config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
 import * as morgan from 'morgan';
-
+import { WinstonLoggerService } from './logger.service';
 async function bootstrap() {
-
   const app = await NestFactory.create(AppModule);
+  const logger = app.get(WinstonLoggerService);
   app.setGlobalPrefix('api/v1');
   app.use(helmet());
   app.use(morgan('combined'));
@@ -32,11 +32,13 @@ async function bootstrap() {
     throw new Error('RabbitMQ configuration is missing in the environment file.');
   }
 
+  logger.log('Starting RabbitMQ Consumer...');
+
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
     options: {
-      urls: ['amqp://user:password@localhost:5672'],
-      queue: 'test',
+      urls: [rabbitMqUrl],
+      queue: queue,
       queueOptions: {
         durable: false,
       },
@@ -44,6 +46,8 @@ async function bootstrap() {
   });
 
   await app.startAllMicroservices();
+  logger.log(`✔️ RabbitMQ Consumer connected to queue: ${queue}`);
+
   const config = new DocumentBuilder()
     .setTitle('API Documentation')
     .setDescription('API description for the service')
@@ -52,5 +56,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   await app.listen(3000);
+  logger.log('🚀 Application started');
 }
 bootstrap();

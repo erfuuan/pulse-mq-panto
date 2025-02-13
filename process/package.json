@@ -24,10 +24,10 @@
     "@nestjs-plus/rabbitmq": "^1.4.4",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.0",
-    "@nestjs/core": "^11.0.1",
+    "@nestjs/core": "^11.0.9",
     "@nestjs/microservices": "^11.0.7",
     "@nestjs/mongoose": "^11.0.1",
-    "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/platform-express": "^11.0.9",
     "@nestjs/swagger": "^11.0.3",
     "amqp-connection-manager": "^4.1.14",
     "amqplib": "^0.10.5",
@@ -40,7 +40,8 @@
     "morgan": "^1.10.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

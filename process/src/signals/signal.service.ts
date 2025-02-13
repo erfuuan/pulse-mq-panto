@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { ISignal, Signal } from './signal.schema';
 import { UpdateSignalDto } from './DTO/update-signal.dto';
 import { CreateSignalDto } from './DTO/create-signal.dto';
+import { PaginatedSignalResponseDto } from './DTO/pagination.dto'
 @Injectable()
 export class SignalService {
   constructor(@InjectModel('Signal') private signalModel: Model<ISignal>,
@@ -16,6 +17,29 @@ export class SignalService {
 
   async findAll(): Promise<Signal[]> {
     return this.signalModel.find().exec();
+  }
+
+  async findAllWithPagination(page: number, limit: number): Promise<PaginatedSignalResponseDto> {
+    const skip = (page - 1) * limit;
+
+    // Fetch signals and count documents in parallel
+    const [signals, total] = await Promise.all([
+      this.signalModel.find().skip(skip).limit(limit), // Paginated data
+      this.signalModel.countDocuments(), // Total count of documents
+    ]);
+
+    // Prepare pagination metadata
+    const meta = {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit), // Calculate total pages
+    };
+
+    return {
+      meta,
+      data: signals,
+    };
   }
 
   async findOne(id: string): Promise<Signal | null> {

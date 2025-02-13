@@ -1,25 +1,9 @@
-// import { Module } from '@nestjs/common';
-// import { SignalModule } from './signals/signal.module';
-// import { ConfigModule } from '@nestjs/config';
-// import { RabbitMQModule } from './rabbitmq/rabbit.module';
-// @Module({
-//   imports: [
-//     ConfigModule.forRoot({ isGlobal: true }),
-//     ScheduleModule.forRoot(),
-//     RabbitMQModule,
-//     SignalModule,
-//   ],
-// })
-// export class AppModule { }
-
-
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import * as Joi from 'joi';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { SignalService} from './signals/signal.service' 
-
 
 @Module({
   imports: [
@@ -38,6 +22,12 @@ import { SignalService} from './signals/signal.service'
         inject: [ConfigService],
         useFactory: async (configService: ConfigService) => {
           const rabbitMqUrl = configService.get<string>('RABBITMQ_URL');
+          const queue = configService.get<string>('RABBITMQ_QUEUE');
+        
+          if (!rabbitMqUrl || !queue) {
+            throw new Error('RabbitMQ configuration is missing in the environment file.');
+          }
+
 
           if (!rabbitMqUrl) {
             throw new Error('RABBITMQ_URL is not defined in the environment');
@@ -46,7 +36,7 @@ import { SignalService} from './signals/signal.service'
             transport: Transport.RMQ,
             options: {
               urls: [rabbitMqUrl],
-              queue: 'test',
+              queue: queue,
               queueOptions: { durable: false },
             },
           };
