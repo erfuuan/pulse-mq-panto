@@ -1,25 +1,25 @@
 version: "3.8"
 
 services:
-  # process:
-  #   image: ghcr.io/erfuuan/PulseMQ-Panto/process:latest
-  #   container_name: process
-  #   ports:
-  #     - "3000:3000"
-  #   env_file:
-  #     - .process.env
-  #   restart: unless-stopped
-  #   networks:
-  #     - backend
+  process:
+    image: ghcr.io/erfuuan/PulseMQ-Panto/process:latest
+    container_name: process
+    ports:
+      - "3000:3000"
+    env_file:
+      - .process.env
+    restart: unless-stopped
+    networks:
+      - backend
 
-  # agent:
-  #   image: ghcr.io/erfuuan/PulseMQ-Panto/agent:latest
-  #   container_name: agent
-  #   env_file:
-  #     - .agent.env
-  #   restart: unless-stopped
-  #   networks:
-  #     - backend
+  agent:
+    image: ghcr.io/erfuuan/PulseMQ-Panto/agent:latest
+    container_name: agent
+    env_file:
+      - .agent.env
+    restart: unless-stopped
+    networks:
+      - backend
 
   mongo:
     image: docker.arvancloud.ir/bitnami/mongodb
@@ -27,10 +27,9 @@ services:
     ports:
       - "27017:27017"
     environment:
-      # MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      # MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      # MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
-      MONGO_INITDB_DATABASE: mongodb://localhost:27017/eventsDB
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
     volumes:
       - mongo_data:/data/db
     networks:
@@ -44,24 +43,13 @@ services:
       - "15672:15672"
       - "5672:5672"
     environment:
-      # RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
-      # RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
-      RABBITMQ_DEFAULT_USER: user
-      RABBITMQ_DEFAULT_PASS: password
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+
     networks:
       - backend
     volumes:
       - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
-
-#  redis:
-#    image: docker.arvancloud.ir/redis:latest
-#    container_name: redis
-#    ports:
-#      - "6379:6379"
-#    networks:
-#      - backend
-#    volumes:
-#      - redis_data:/data
 
 networks:
   backend:
