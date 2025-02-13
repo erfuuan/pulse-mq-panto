@@ -1,0 +1,55 @@
+name: Main Workflow
+
+on:
+  push:
+    branches:
+      - main
+  release:
+    types: [published]
+
+jobs:
+  build-process-image:
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build and push process Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: process
+          file: process/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/erfuuan/part-task/process:${{ github.event.release.tag_name }}
+            ghcr.io/erfuuan/part-task/process:latest
+
+  build-agent-image:
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build and push agent Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: agent
+          file: agent/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/erfuuan/part-task/agent:${{ github.event.release.tag_name }}
+            ghcr.io/erfuuan/part-task/agent:latest
