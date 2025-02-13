@@ -39,21 +39,19 @@ Edit the `.env` files to set the desired values.
 
 #### **Example `.agent.env`**  
 ```ini
-AGENT_ID=test1
+RABBITMQ_URL=amqp://user:password@localhost:5672
+RABBITMQ_QUEUE=xray_data_queue
 ```
 
 #### **Example `.process.env`**  
 ```ini
 MONGO_URI=mongodb://mongo:27017/eventsDB
 
-REDIS_HOST=redis
-REDIS_PORT=6379
-
 RABBITMQ_URL=amqp://user:password@rabbitmq:5672
-RABBITMQ_QUEUE=test      
-PORT=3000                        
-
+RABBITMQ_QUEUE=xray_data_queue      
 RABBITMQ_QUEUE_DURABLE=0
+
+PORT=3000                        
 ```
 
 ### ✅ **5. Run the Service in Detached Mode**  
