@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   process:
-    image: ghcr.io/erfuuan/PulseMQ-Panto/process:latest
+    image: ghcr.io/erfuuan/pulse-mq-panto/process:latest
     container_name: process
     ports:
       - "3000:3000"
@@ -13,7 +13,7 @@ services:
       - backend
 
   agent:
-    image: ghcr.io/erfuuan/PulseMQ-Panto/agent:latest
+    image: ghcr.io/erfuuan/pulse-mq-panto/agent:latest
     container_name: agent
     env_file:
       - .agent.env
